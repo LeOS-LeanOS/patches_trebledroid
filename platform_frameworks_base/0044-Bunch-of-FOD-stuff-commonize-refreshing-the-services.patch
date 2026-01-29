@@ -5,39 +5,39 @@ Subject: [PATCH 44/55] Bunch of FOD stuff -- commonize refreshing the
  services, start supporting AIDL Samsung
 
 ---
- .../server/biometrics/AuthService.java        | 156 +++++++++++++++---
- 1 file changed, 137 insertions(+), 19 deletions(-)
+ .../server/biometrics/AuthService.java        | 155 +++++++++++++++---
+ 1 file changed, 136 insertions(+), 19 deletions(-)
 
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index 4ee16e47fcc5..e5e786c67813 100644
+index 6584097de..cc4792ca9 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
-@@ -42,6 +42,7 @@ import android.hardware.biometrics.IAuthService;
+@@ -44,6 +44,7 @@ import android.hardware.biometrics.IAuthService;
  import android.hardware.biometrics.IBiometricEnabledOnKeyguardCallback;
  import android.hardware.biometrics.IBiometricService;
  import android.hardware.biometrics.IBiometricServiceReceiver;
 +import android.hardware.biometrics.fingerprint.IFingerprint;
+ import android.hardware.biometrics.IIdentityCheckStateListener;
  import android.hardware.biometrics.IInvalidationCallback;
  import android.hardware.biometrics.ITestSession;
- import android.hardware.biometrics.ITestSessionCallback;
-@@ -95,6 +96,7 @@ import android.os.Build;
+@@ -100,6 +101,7 @@ import android.os.Build;
  import vendor.samsung.hardware.biometrics.fingerprint.V3_0.ISehBiometricsFingerprint;
  import vendor.goodix.hardware.biometrics.fingerprint.V2_1.IGoodixFingerprintDaemon;
  import vendor.samsung.hardware.sysinput.V1_0.ISehSysInputDev;
 +import vendor.samsung.hardware.biometrics.fingerprint.ISehFingerprint;
- 
+
  import vendor.xiaomi.hardware.fingerprintextension.V1_0.IXiaomiFingerprint;
- 
-@@ -118,6 +120,8 @@ public class AuthService extends SystemService {
- 
+
+@@ -123,6 +125,8 @@ public class AuthService extends SystemService {
+
      private FileObserver fodFileObserver = null;
      private ISehBiometricsFingerprint mSamsungFingerprint = null;
 +    private ISehFingerprint mSamsungFingerprintAidl = null;
 +    private vendor.samsung.hardware.sysinput.ISehSysInputDev mSamsungSysinputAidl = null;
- 
+
      private IXiaomiFingerprint mXiaomiFingerprint = null;
- 
-@@ -768,6 +772,101 @@ public class AuthService extends SystemService {
+
+@@ -869,6 +873,101 @@ public class AuthService extends SystemService {
       *                 └── for (s : p.sensors)
       *                     └── BiometricService.registerAuthenticator(s)
       */
@@ -139,10 +139,10 @@ index 4ee16e47fcc5..e5e786c67813 100644
      @Override
      public void onStart() {
          mBiometricService = mInjector.getBiometricService();
-@@ -794,19 +893,9 @@ public class AuthService extends SystemService {
- 
+@@ -896,19 +995,9 @@ public class AuthService extends SystemService {
          registerAuthenticators();
          mInjector.publishBinderService(this, mImpl);
+
 -        try {
 -            mSamsungFingerprint = ISehBiometricsFingerprint.getService();
 -            android.util.Log.e("PHH", "Got samsung fingerprint HAL");
@@ -162,7 +162,7 @@ index 4ee16e47fcc5..e5e786c67813 100644
              samsungCmd("fod_enable,1,1,0");
              String actualMaskBrightnessPath = "/sys/class/lcd/panel/actual_mask_brightness";
              android.util.Log.e("PHH-Enroll", "Reading actual brightness file gives " + readFile(actualMaskBrightnessPath));
-@@ -814,9 +903,7 @@ public class AuthService extends SystemService {
+@@ -916,9 +1005,7 @@ public class AuthService extends SystemService {
                  @Override
                  public void onEvent(int event, String path) {
                      String actualMask = readFile(actualMaskBrightnessPath);
@@ -173,9 +173,9 @@ index 4ee16e47fcc5..e5e786c67813 100644
                      Slog.d("PHH-Enroll", "New actual mask brightness is " + actualMask);
                      try {
                          int eventReq = 0;
-@@ -1144,22 +1231,53 @@ public class AuthService extends SystemService {
+@@ -1246,22 +1333,52 @@ public class AuthService extends SystemService {
              udfpsProps[2] = (int)mW;
- 
+
              try {
 -                mSamsungFingerprint = ISehBiometricsFingerprint.getService();
 +                ISehBiometricsFingerprint samsungFingerprint = null;
@@ -196,7 +196,6 @@ index 4ee16e47fcc5..e5e786c67813 100644
                          Slog.d("PHH-Enroll", "\t" + i + ":" + out.get(i));
                      }
                  } );
- 
 +            } catch(Exception e) {
 +                if (e instanceof java.util.NoSuchElementException) {
 +                    Slog.d("PHH-Enroll", "Failed setting samsung3.0 fingerprint recognition, doesn't exist");
@@ -222,7 +221,7 @@ index 4ee16e47fcc5..e5e786c67813 100644
 +
 +                Slog.d("PHH-Enroll", "Samsung ask for sensor brightness value");
 +                sehres = fpaidl.sehRequest(0, 32, 0, new byte[0]);
-+
+
 +                Slog.d("PHH-Enroll", "Result is " + sehres.retValue);
 +                for(int i=0; i<sehres.data.length; i++) {
 +                    Slog.d("PHH-Enroll", "\t" + i + ":" + sehres.data[i]);
@@ -230,6 +229,6 @@ index 4ee16e47fcc5..e5e786c67813 100644
              } catch(Exception e) {
                  Slog.d("PHH-Enroll", "Failed setting samsung3.0 fingerprint recognition", e);
              }
--- 
+--
 2.43.0
 
