@@ -14,7 +14,7 @@ index ad7946c..d7a8d87 100644
 +++ b/opengl/libs/EGL/Loader.cpp
 @@ -289,7 +289,7 @@ void* Loader::open(egl_connection_t* cnx) {
      }
- 
+
      // Finally, try to load default driver.
 -    bool failToLoadFromDriverSuffixProperty = false;
 +/*    bool failToLoadFromDriverSuffixProperty = false;
@@ -30,6 +30,5 @@ index ad7946c..d7a8d87 100644
      if (!hnd) {
          // Can't find graphics driver by appending the value from system properties, now search for
          // the exact name without any suffix of the GLES userspace driver in both locations.
--- 
+--
 2.34.1
-

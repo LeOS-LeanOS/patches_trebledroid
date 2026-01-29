@@ -36,11 +36,11 @@ index 000000000..492110478
 +                     }
 +                 }
 +-            }
-++            
-+ 
+++
++
 +             // This runs after Process.start() as this method may block app process starting time
 +             // if dir is not cached. Running this method after Process.start() can make it
-+-- 
++--
 +2.34.1
 +
 diff --git a/services/core/java/com/android/server/input/InputManagerService.java b/services/core/java/com/android/server/input/InputManagerService.java
@@ -48,7 +48,7 @@ index 197f3ada4..2f3b811e7 100644
 --- a/services/core/java/com/android/server/input/InputManagerService.java
 +++ b/services/core/java/com/android/server/input/InputManagerService.java
 @@ -442,7 +442,6 @@ public class InputManagerService extends IInputManager.Stub
- 
+
      /** Switch code: Microphone. When set, the mic is muted. */
      public static final int SW_MUTE_DEVICE = 0x0e;
 -
@@ -74,7 +74,7 @@ index 197f3ada4..2f3b811e7 100644
          synchronized (mLidSwitchLock) {
              mLidSwitchCallbacks.add(callback);
 @@ -682,7 +679,8 @@ public class InputManagerService extends IInputManager.Stub
- 
+
              // Send the initial lid switch state to any callback registered before the system was
              // ready.
 -            int switchState = getSwitchState(-1 /* deviceId */, InputDevice.SOURCE_ANY, SW_LID);
@@ -86,11 +86,10 @@ index 197f3ada4..2f3b811e7 100644
 @@ -2532,7 +2530,6 @@ public class InputManagerService extends IInputManager.Stub
                      + ", mask=" + Integer.toHexString(switchMask));
          }
- 
+
 -        if ((switchMask & SW_LID_BIT) != 0) {
          if ((switchMask & (1 << mSwForLid)) != 0) {
              final boolean lidOpen = ((switchValues & (1 << mSwForLid)) == 0);
              synchronized (mLidSwitchLock) {
--- 
+--
 2.34.1
-

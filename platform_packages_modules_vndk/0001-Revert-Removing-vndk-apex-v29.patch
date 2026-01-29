@@ -23,6 +23,5 @@ index 8f194df..ca076b8 100644
 +    vndk_version: "29",
 +    system_ext_specific: true,
 +}
--- 
+--
 2.43.0
-

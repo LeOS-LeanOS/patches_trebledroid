@@ -771,7 +771,7 @@ index be895d9..baa56a3 100644
 @@ -23,6 +23,13 @@ package {
      default_applicable_licenses: ["system_sepolicy_license"],
  }
- 
+
 +se_build_files {
 +    name: "28.0.board.compat.map",
 +    srcs: [
@@ -792,7 +792,7 @@ index be895d9..baa56a3 100644
 +        "compat/28.0/28.0.compat.cil",
 +    ],
 +}
- 
+
  se_build_files {
      name: "29.0.board.compat.cil",
 @@ -92,6 +105,12 @@ se_build_files {
@@ -805,7 +805,7 @@ index be895d9..baa56a3 100644
 +        "compat/28.0/28.0.ignore.cil",
 +    ],
 +}
- 
+
  se_build_files {
      name: "29.0.board.ignore.map",
 @@ -127,6 +146,13 @@ se_build_files {
@@ -819,7 +819,7 @@ index be895d9..baa56a3 100644
 +    top_half: "plat_29.0.cil",
 +    version: "28.0",
 +}
- 
+
  se_cil_compat_map {
      name: "plat_29.0.cil",
 @@ -167,6 +193,14 @@ se_cil_compat_map {
@@ -834,7 +834,7 @@ index be895d9..baa56a3 100644
 +    system_ext_specific: true,
 +    version: "28.0",
 +}
- 
+
  se_cil_compat_map {
      name: "system_ext_29.0.cil",
 @@ -212,6 +246,14 @@ se_cil_compat_map {
@@ -849,27 +849,27 @@ index be895d9..baa56a3 100644
 +    product_specific: true,
 +    version: "28.0",
 +}
- 
+
  se_cil_compat_map {
      name: "product_29.0.cil",
 @@ -257,6 +299,13 @@ se_cil_compat_map {
      top_half: "product_34.0.cil",
      version: "33.0",
  }
-+ 
++
 +se_cil_compat_map {
 +    name: "28.0.ignore.cil",
 +    bottom_half: [":28.0.board.ignore.map{.plat_private}"],
 +    top_half: "29.0.ignore.cil",
 +    version: "28.0",
 +}
- 
+
  se_cil_compat_map {
      name: "29.0.ignore.cil",
 @@ -357,6 +406,12 @@ se_cil_compat_map {
      version: "33.0",
  }
- 
+
 +se_compat_cil {
 +    name: "28.0.compat.cil",
 +    srcs: [":28.0.board.compat.cil{.plat_private}"],
@@ -882,7 +882,7 @@ index be895d9..baa56a3 100644
 @@ -387,6 +442,14 @@ se_compat_cil {
      version: "33.0",
  }
- 
+
 +se_compat_cil {
 +    name: "system_ext_28.0.compat.cil",
 +    srcs: [":28.0.board.compat.cil{.system_ext_private}"],
@@ -34641,6 +34641,5 @@ index a19e8ec..b1e918a 100644
  java_genrule {
      name: "29.0_mapping.combined.cil",
      srcs: [
--- 
+--
 2.34.1
-

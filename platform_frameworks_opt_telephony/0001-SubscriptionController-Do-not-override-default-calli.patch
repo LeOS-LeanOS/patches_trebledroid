@@ -26,11 +26,11 @@ index bedc20e9d5..8acca40a55 100644
  import android.util.IndentingPrintWriter;
  import android.util.LocalLog;
 +import android.util.Log;
- 
+
  import com.android.internal.R;
  import com.android.internal.annotations.VisibleForTesting;
 @@ -3291,7 +3292,22 @@ public class SubscriptionManagerService extends ISub.Stub {
- 
+
                  TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
                  if (telecomManager != null) {
 -                    telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
@@ -51,8 +51,7 @@ index bedc20e9d5..8acca40a55 100644
 +                        log("[setDefaultVoiceSubId] default phoneAccountHandle not changed.");
 +                    }
                  }
- 
-                 updateDefaultSubId();
--- 
-2.43.0
 
+                 updateDefaultSubId();
+--
+2.43.0

@@ -32,10 +32,10 @@ index b05de11ff..c32ba57c6 100644
       * Let remote insets controller control system bars regardless of other settings.
       */
      private boolean mRemoteInsetsControllerControlsSystemBars;
-+    
++
 +    private vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf mMtkPerf;
 +    private vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower mOldMtkPerf;
- 
+
      @Nullable
      StatusBarManagerInternal getStatusBarManagerInternal() {
 @@ -460,6 +463,19 @@ public class DisplayPolicy {
@@ -55,7 +55,7 @@ index b05de11ff..c32ba57c6 100644
 +            android.util.Log.d("PHH-Power", "Retrieving mtkpower 1.0", t);
 +            mOldMtkPerf = null;
 +        }
- 
+
          final Looper looper = UiThread.getHandler().getLooper();
          mHandler = new PolicyHandler(looper);
 @@ -545,6 +561,17 @@ public class DisplayPolicy {
@@ -74,7 +74,7 @@ index b05de11ff..c32ba57c6 100644
 +                        }
 +                    }
                  }
- 
+
                  @Override
 @@ -563,6 +590,28 @@ public class DisplayPolicy {
                      if (listener != null) {
@@ -103,8 +103,7 @@ index b05de11ff..c32ba57c6 100644
 +                        }
 +                    }
                  }
- 
-                 @Override
--- 
-2.34.1
 
+                 @Override
+--
+2.34.1

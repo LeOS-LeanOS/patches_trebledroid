@@ -15,7 +15,7 @@ index f0c7ee7..5113da2 100644
 @@ -1117,13 +1117,7 @@ func (f *filesystem) verifyGenericConfig(ctx android.ModuleContext, specs map[st
  		return true
  	})
- 
+
 -	if len(nonGenericModules) > 0 {
 -		errStr := "\n"
 -		for _, m := range android.SortedKeys(nonGenericModules) {
@@ -25,8 +25,7 @@ index f0c7ee7..5113da2 100644
 -	}
 +
  }
- 
- type buildImageParams struct {
--- 
-2.34.1
 
+ type buildImageParams struct {
+--
+2.34.1

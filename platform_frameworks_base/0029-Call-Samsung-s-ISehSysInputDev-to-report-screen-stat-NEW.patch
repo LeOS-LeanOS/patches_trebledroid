@@ -36,19 +36,19 @@ index 3da7874f6..3bafa12ab 100644
 @@ -63,6 +64,8 @@ import com.android.server.display.notifications.DisplayNotificationManager;
  import com.android.server.lights.LightsManager;
  import com.android.server.lights.LogicalLight;
- 
+
 +import vendor.samsung.hardware.sysinput.V1_1.ISehSysInputDev;
 +
  import java.io.PrintWriter;
  import java.util.ArrayList;
  import java.util.Arrays;
 @@ -257,6 +260,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
- 
+
          private DisplayEventReceiver.FrameRateOverride[] mFrameRateOverrides =
                  new DisplayEventReceiver.FrameRateOverride[0];
 +        private boolean triedSamsungHal = false;
 +        private ISehSysInputDev samsungSysinput = null;
- 
+
          LocalDisplayDevice(IBinder displayToken, long physicalDisplayId,
                  SurfaceControl.StaticDisplayInfo staticDisplayInfo,
 @@ -959,11 +964,25 @@ final class LocalDisplayAdapter extends DisplayAdapter {
@@ -93,8 +93,7 @@ index 3da7874f6..3bafa12ab 100644
 +                        }
 +
                          setCommittedState(state);
- 
-                         // If we're entering a suspended (but not OFF) power state and we
--- 
-2.34.1
 
+                         // If we're entering a suspended (but not OFF) power state and we
+--
+2.34.1

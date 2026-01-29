@@ -34,10 +34,9 @@ index 2dca73ff7..71b1e625d 100644
 +                            logNotAllowedInPartition(name, permFile, parser);
 +                        }
 +                        XmlUtils.skipCurrentTag(parser);
-+                    } break;                        
++                    } break;
                  }
              }
          } catch (XmlPullParserException e) {
--- 
+--
 2.34.1
-

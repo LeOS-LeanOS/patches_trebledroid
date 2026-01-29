@@ -22,6 +22,5 @@ index ab0286dd64..77fc11b008 100644
                      TelephonyManager.from(mContext).setBasebandVersionForPhone(getPhoneId(),
                              length <= MAX_VERSION_LEN ? version
                                  : version.substring(length - MAX_VERSION_LEN, length));
--- 
+--
 2.43.0
-

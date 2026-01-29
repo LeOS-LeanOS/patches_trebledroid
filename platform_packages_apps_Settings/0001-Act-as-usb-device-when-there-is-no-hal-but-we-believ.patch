@@ -27,6 +27,5 @@ index 16ea602bc4f..262afbcbb31 100644
          } else if (UsbManager.ACTION_USB_PORT_CHANGED.equals(intent.getAction())) {
              UsbPortStatus portStatus = intent.getExtras()
                      .getParcelable(UsbManager.EXTRA_PORT_STATUS);
--- 
+--
 2.43.0
-

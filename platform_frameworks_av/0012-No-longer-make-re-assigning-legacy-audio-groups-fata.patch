@@ -27,6 +27,5 @@ index b0279b954a..99be476e18 100644
                  volumeGroup->addSupportedStream(group.stream);
              }
              addSupportedAttributesToGroup(group, volumeGroup, strategy);
--- 
+--
 2.43.0
-

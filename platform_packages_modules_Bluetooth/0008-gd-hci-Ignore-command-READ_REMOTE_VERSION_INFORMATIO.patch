@@ -28,6 +28,5 @@ index 06677cb7c9..e4950f2789 100644
          log::assert_that(op_code == OpCode::NONE,
                           "Received {} event with OpCode {} without a waiting command(is the HAL "
                           "sending commands, but not handling the events?)",
--- 
+--
 2.43.0
-
