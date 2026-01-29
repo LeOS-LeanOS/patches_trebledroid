@@ -23,17 +23,17 @@ smoother.
 Change-Id: I9f1eac5a20b98920a5d0c8204fe4d165ba069f5a
 ---
  services/core/Android.bp                      |  4 +-
- .../com/android/server/wm/DisplayPolicy.java  | 49 +++++++++++++++++++
- 2 files changed, 52 insertions(+), 1 deletion(-)
+ .../com/android/server/wm/DisplayPolicy.java  | 51 +++++++++++++++++++
+ 2 files changed, 54 insertions(+), 1 deletion(-)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index 2e421683181e..a7d9b4ba57c3 100644
+index 0fa5504e3..6a73a155c 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -264,7 +264,9 @@ java_library_static {
-         "android.adpf.sessionmanager_aidl-java",
-         "uprobestats_flags_java_lib",
+@@ -252,7 +252,9 @@ java_library_static {
          "clipboard_flags_lib",
+         "aconfig_adbdauth_flags_java_lib",
+         "AvfBuildFlags",
 -        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
 +        // HIDL
 +        "vendor.mediatek.hardware.mtkpower-V1.1-java",
@@ -42,23 +42,23 @@ index 2e421683181e..a7d9b4ba57c3 100644
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
-index dbae9c4b3a0f..7394786e3548 100644
+index b05de11ff..77feb1c4a 100644
 --- a/services/core/java/com/android/server/wm/DisplayPolicy.java
 +++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
-@@ -214,6 +214,9 @@ public class DisplayPolicy {
+@@ -219,6 +219,9 @@ public class DisplayPolicy {
       */
      private boolean mRemoteInsetsControllerControlsSystemBars;
- 
+
 +    private vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf mMtkPerf;
 +    private vendor.mediatek.hardware.mtkpower.V1_0.IMtkPower mOldMtkPerf;
 +
+     @Nullable
      StatusBarManagerInternal getStatusBarManagerInternal() {
          synchronized (mServiceAcquireLock) {
-             if (mStatusBarManagerInternal == null) {
-@@ -422,6 +425,19 @@ public class DisplayPolicy {
-             mScreenOnEarly = true;
+@@ -461,6 +464,20 @@ public class DisplayPolicy {
              mScreenOnFully = true;
          }
+
 +        try {
 +            mMtkPerf = vendor.mediatek.hardware.mtkpower.V1_1.IMtkPerf.getService();
 +        } catch(Throwable t) {
@@ -72,10 +72,11 @@ index dbae9c4b3a0f..7394786e3548 100644
 +            android.util.Log.d("PHH-Power", "Retrieving mtkpower 1.0", t);
 +            mOldMtkPerf = null;
 +        }
- 
++
          final Looper looper = UiThread.getHandler().getLooper();
          mHandler = new PolicyHandler(looper);
-@@ -506,6 +522,17 @@ public class DisplayPolicy {
+         // TODO(b/181821798) Migrate SystemGesturesPointerEventListener to use window context.
+@@ -545,6 +562,17 @@ public class DisplayPolicy {
                          mService.mPowerManagerInternal.setPowerBoost(
                                  Boost.INTERACTION, duration);
                      }
@@ -91,12 +92,13 @@ index dbae9c4b3a0f..7394786e3548 100644
 +                        }
 +                    }
                  }
- 
+
                  @Override
-@@ -524,6 +551,28 @@ public class DisplayPolicy {
+@@ -563,6 +591,29 @@ public class DisplayPolicy {
                      if (listener != null) {
                          listener.onTouchStart();
                      }
++
 +                    if(mMtkPerf != null) {
 +                        try {
 +                            android.util.Log.d("PHH-Power", "mtk power hint");
@@ -120,8 +122,8 @@ index dbae9c4b3a0f..7394786e3548 100644
 +                        }
 +                    }
                  }
- 
+
                  @Override
--- 
+--
 2.43.0
 
