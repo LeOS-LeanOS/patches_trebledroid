@@ -36,7 +36,7 @@ index 83766adbf..71a041b3a 100644
 @@ -548,15 +543,20 @@ bool ImageManager::MapImageDevice(const std::string& name,
          return false;
      }
-
+ 
 -    if (!can_use_devicemapper) {
 -        LOG(ERROR) << "Cannot map image: /data must be mounted on top of device-mapper.";
 +    if (can_use_devicemapper) {
@@ -55,8 +55,9 @@ index 83766adbf..71a041b3a 100644
          return false;
      }
 +#endif
-
+ 
      // Set a property so we remember this is mapped.
      auto prop_name = GetStatusPropertyName(name);
---
+-- 
 2.43.0
+

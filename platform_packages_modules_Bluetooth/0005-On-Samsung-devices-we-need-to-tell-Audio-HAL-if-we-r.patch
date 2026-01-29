@@ -29,14 +29,14 @@ index 3c2fe0f8bf..a16964f859 100644
          mHasSwbAptXEnabled = false;
 +        mReportScoSampleRate = 0;
      }
-
+ 
      public void dump(StringBuilder sb) {
 @@ -572,6 +574,7 @@ class HeadsetStateMachine extends StateMachine {
              mHasSwbLc3Enabled = false;
              mHasNrecEnabled = false;
              mHasSwbAptXEnabled = false;
 +            mReportScoSampleRate = 0;
-
+ 
              broadcastStateTransitions();
              logFailureIfNeeded();
 @@ -1916,6 +1919,9 @@ class HeadsetStateMachine extends StateMachine {
@@ -47,7 +47,7 @@ index 3c2fe0f8bf..a16964f859 100644
 +            am.setParameters("g_sco_samplerate=" + mReportScoSampleRate);
 +        }
      }
-
+ 
      @VisibleForTesting
 @@ -2063,6 +2069,7 @@ class HeadsetStateMachine extends StateMachine {
          switch (wbsConfig) {
@@ -65,5 +65,6 @@ index 3c2fe0f8bf..a16964f859 100644
                  break;
              default:
                  Log.e(TAG, "processWBSEvent: unknown wbsConfig " + wbsConfig);
---
+-- 
 2.43.0
+

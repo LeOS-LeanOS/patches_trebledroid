@@ -28,5 +28,6 @@ index ecc704e0..29f4559c 100644
  		if(strcmp(a_genfscon->fs_str, "exfat") == 0 || strcmp(a_genfscon->fs_str, "esdfs") == 0) {
              if(strcmp(a_genfscon->path_str, "/") == 0)
                  bypass = 1;
---
+-- 
 2.43.0
+

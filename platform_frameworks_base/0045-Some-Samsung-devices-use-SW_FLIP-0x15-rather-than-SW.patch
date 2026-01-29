@@ -1,18 +1,18 @@
-From 400c772e8563a159d588b1034b9123d17c7daaa3 Mon Sep 17 00:00:00 2001
-From: harvey186 <harvey186@hotmail.com>
-Date: Wed, 3 Dec 2025 16:03:19 +0100
-Subject: [PATCH] 0045-Some-Samsung-devices-use-SW_FLIP-0x15-rather-than-SW
+From 5a15db535c71c4fb5188b6ecd1dbc48feb34b964 Mon Sep 17 00:00:00 2001
+From: Pierre-Hugues Husson <phh@phh.me>
+Date: Sun, 4 Feb 2024 18:01:07 -0500
+Subject: [PATCH 45/55] Some Samsung devices use SW_FLIP 0x15 rather than
+ SW_MACHINE_COVER 0x10, so use that
 
-Change-Id: I609a1b420702e8a536f8bfd6985536e8f2262438
 ---
  .../server/input/InputManagerService.java     | 25 +++++++++++++------
  1 file changed, 18 insertions(+), 7 deletions(-)
 
 diff --git a/services/core/java/com/android/server/input/InputManagerService.java b/services/core/java/com/android/server/input/InputManagerService.java
-index b17ada2ed..197f3ada4 100644
+index f6fa44825e68..699774f676f5 100644
 --- a/services/core/java/com/android/server/input/InputManagerService.java
 +++ b/services/core/java/com/android/server/input/InputManagerService.java
-@@ -445,6 +445,8 @@ public class InputManagerService extends IInputManager.Stub
+@@ -428,6 +428,8 @@ public class InputManagerService extends IInputManager.Stub
  
      /** Switch code: Cover. When set, the cover is closed. */
      public static final int SW_MACHINE_COVER = 0x10;
@@ -21,9 +21,9 @@ index b17ada2ed..197f3ada4 100644
  
      public static final int SW_LID_BIT = 1 << SW_LID;
      public static final int SW_TABLET_MODE_BIT = 1 << SW_TABLET_MODE;
-@@ -609,13 +611,22 @@ public class InputManagerService extends IInputManager.Stub
-         mWiredAccessoryCallbacks = callbacks;
+@@ -586,13 +588,22 @@ public class InputManagerService extends IInputManager.Stub
      }
+ 
      private void checkForSwMachineCover() {
 -        int machineCoverState = getSwitchState(-1 /* deviceId */, InputDevice.SOURCE_ANY, SW_MACHINE_COVER);
 -        if (machineCoverState != KEY_STATE_UNKNOWN) {
@@ -52,5 +52,5 @@ index b17ada2ed..197f3ada4 100644
  
      void registerLidSwitchCallbackInternal(@NonNull LidSwitchCallback callback) {
 -- 
-2.34.1
+2.43.0
 

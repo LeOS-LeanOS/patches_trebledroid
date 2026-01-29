@@ -23,5 +23,6 @@ index ca076b8..9151ceb 100644
 +    vndk_version: "28",
 +    system_ext_specific: true,
 +}
---
+-- 
 2.43.0
+

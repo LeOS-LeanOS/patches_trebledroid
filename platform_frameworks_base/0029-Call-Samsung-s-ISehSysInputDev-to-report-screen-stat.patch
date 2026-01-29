@@ -1,31 +1,34 @@
-From f64d96e39c954b05e714d2a321604476aeeefd36 Mon Sep 17 00:00:00 2001
-From: harvey186 <harvey186@hotmail.com>
-Date: Wed, 3 Dec 2025 15:44:16 +0100
-Subject: [PATCH] Call-Samsung-s-ISehSysInputDev-to-report-screen-stat-NEW
+From 1c76699347fd5f11936d0e4132df6e8ec6ea3335 Mon Sep 17 00:00:00 2001
+From: Pierre-Hugues Husson <phh@phh.me>
+Date: Wed, 14 Dec 2022 17:21:00 -0500
+Subject: [PATCH 29/55] Call Samsung's ISehSysInputDev to report screen state
+ to touchscreen driver
 
-Change-Id: I090a491575cf3b3c7de746fef029b6722f79e95d
+This fixes touchscreen not waking up on Galaxy F23
+
+Change-Id: If2d74b97a51b19c730a6f9a1b1f4293d1469a9f8
 ---
  services/core/Android.bp                      |  1 +
- .../server/display/LocalDisplayAdapter.java   | 31 ++++++++++++++++++-
- 2 files changed, 31 insertions(+), 1 deletion(-)
+ .../server/display/LocalDisplayAdapter.java   | 31 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
 diff --git a/services/core/Android.bp b/services/core/Android.bp
-index fab23ee1d..0fa5504e3 100644
+index 8a983f9e071d..2e421683181e 100644
 --- a/services/core/Android.bp
 +++ b/services/core/Android.bp
-@@ -252,6 +252,7 @@ java_library_static {
+@@ -264,6 +264,7 @@ java_library_static {
+         "android.adpf.sessionmanager_aidl-java",
+         "uprobestats_flags_java_lib",
          "clipboard_flags_lib",
-         "aconfig_adbdauth_flags_java_lib",
-         "AvfBuildFlags",
 +        "vendor.samsung.hardware.sysinput-V1.2-java", // HIDL
      ],
      javac_shard_size: 50,
      javacflags: [
 diff --git a/services/core/java/com/android/server/display/LocalDisplayAdapter.java b/services/core/java/com/android/server/display/LocalDisplayAdapter.java
-index 3da7874f6..3bafa12ab 100644
+index 2cad7ed2e9e9..90ffa496fe66 100644
 --- a/services/core/java/com/android/server/display/LocalDisplayAdapter.java
 +++ b/services/core/java/com/android/server/display/LocalDisplayAdapter.java
-@@ -40,6 +40,7 @@ import android.os.Trace;
+@@ -39,6 +39,7 @@ import android.util.DisplayMetrics;
  import android.util.DisplayUtils;
  import android.util.LongSparseArray;
  import android.util.Slog;
@@ -33,29 +36,28 @@ index 3da7874f6..3bafa12ab 100644
  import android.util.SparseArray;
  import android.util.Spline;
  import android.view.Display;
-@@ -63,6 +64,8 @@ import com.android.server.display.notifications.DisplayNotificationManager;
+@@ -62,6 +63,8 @@ import com.android.server.display.notifications.DisplayNotificationManager;
  import com.android.server.lights.LightsManager;
  import com.android.server.lights.LogicalLight;
-
+ 
 +import vendor.samsung.hardware.sysinput.V1_1.ISehSysInputDev;
 +
  import java.io.PrintWriter;
  import java.util.ArrayList;
  import java.util.Arrays;
-@@ -257,6 +260,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
-
+@@ -260,6 +263,8 @@ final class LocalDisplayAdapter extends DisplayAdapter {
+ 
          private DisplayEventReceiver.FrameRateOverride[] mFrameRateOverrides =
                  new DisplayEventReceiver.FrameRateOverride[0];
 +        private boolean triedSamsungHal = false;
 +        private ISehSysInputDev samsungSysinput = null;
-
+ 
          LocalDisplayDevice(IBinder displayToken, long physicalDisplayId,
                  SurfaceControl.StaticDisplayInfo staticDisplayInfo,
-@@ -959,11 +964,25 @@ final class LocalDisplayAdapter extends DisplayAdapter {
-                                 mSidekickActive = false;
+@@ -940,16 +945,42 @@ final class LocalDisplayAdapter extends DisplayAdapter {
                              }
                          }
--
+ 
 +                        if (!triedSamsungHal) {
 +                            triedSamsungHal = true;
 +                            try {
@@ -75,10 +77,10 @@ index 3da7874f6..3bafa12ab 100644
 +                                Log.d("PHH", "Failed settings tsp enable", t);
 +                            }
 +                        }
++
                          try {
-                             final long start = SystemClock.uptimeMillis();
                              mSurfaceControlProxy.setDisplayPowerMode(token, mode);
-@@ -973,6 +992,16 @@ final class LocalDisplayAdapter extends DisplayAdapter {
+                             Trace.traceCounter(Trace.TRACE_TAG_POWER, "DisplayPowerMode", mode);
                          } finally {
                              Trace.traceEnd(Trace.TRACE_TAG_POWER);
                          }
@@ -93,7 +95,8 @@ index 3da7874f6..3bafa12ab 100644
 +                        }
 +
                          setCommittedState(state);
-
+ 
                          // If we're entering a suspended (but not OFF) power state and we
---
-2.34.1
+-- 
+2.43.0
+

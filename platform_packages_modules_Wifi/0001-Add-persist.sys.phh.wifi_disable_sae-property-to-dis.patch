@@ -22,5 +22,6 @@ index 1c4e549cf1..193b317541 100644
          return mWifiResourceCache
                  .getBoolean(R.bool.config_wifiSaeUpgradeEnabled);
      }
---
+-- 
 2.43.0
+

@@ -28,5 +28,6 @@ index 9b0a51dc..09d8b8e1 100644
  		if(strcmp(a_genfscon->fs_str, "exfat") == 0 || strcmp(a_genfscon->fs_str, "esdfs") == 0 || strcmp(a_genfscon->fs_str, "fuseblk") == 0) {
              if(strcmp(a_genfscon->path_str, "/") == 0)
                  bypass = 1;
---
+-- 
 2.43.0
+

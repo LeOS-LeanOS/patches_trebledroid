@@ -14,12 +14,13 @@ index 01e520e..e4991c2 100644
 +++ b/modules/environment.cc
 @@ -28,7 +28,7 @@ bool IsTreblelizedDevice() {
  }
-
+ 
  bool IsVndkLiteDevice() {
 -  return Variables::GetValue("ro.vndk.lite").value_or("") == "true";
 +  return false;
  }
-
+ 
  bool IsVndkInSystemNamespace() {
---
+-- 
 2.43.0
+
