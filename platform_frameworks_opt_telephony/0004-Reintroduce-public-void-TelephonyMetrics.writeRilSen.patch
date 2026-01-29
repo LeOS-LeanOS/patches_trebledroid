@@ -14,33 +14,86 @@ Fixes https://github.com/phhusson/treble_experimentations/issues/2125.
 
 Co-authored-by: Sarah Vandomelen <sarah@sightworks.com>
 ---
- .../telephony/metrics/TelephonyMetrics.java         | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .../telephony/metrics/TelephonyMetrics.java   | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
 
 diff --git a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
-index 3fdbfe0ed7..fb8011c3df 100644
---- a/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
+new file mode 100644
+index 0000000..769f1b0
+--- /dev/null
 +++ b/src/java/com/android/internal/telephony/metrics/TelephonyMetrics.java
-@@ -2320,6 +2320,19 @@ public class TelephonyMetrics {
-         smsSession.increaseExpectedResponse();
-     }
- 
+@@ -0,0 +1,71 @@
++/*
++ * Copyright (C) 2016 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.internal.telephony.metrics;
++
++/**
++ * Stub class to maintain backwards compatibility with older IMS implementations
++ * (e.g., MediaTek IMS for Android Q/R) that call TelephonyMetrics methods directly.
++ *
++ * The actual TelephonyMetrics class was removed in Android 13+ and its functionality
++ * was moved to other metrics classes. This stub provides the method signatures that
++ * older IMS implementations expect, preventing MethodNotFoundException crashes.
++ *
++ * See: https://github.com/nickolay/gms_package/issues/2125
++ */
++public class TelephonyMetrics {
++
++    private static TelephonyMetrics sInstance;
++
++    /** Returns the singleton instance of TelephonyMetrics */
++    public static synchronized TelephonyMetrics getInstance() {
++        if (sInstance == null) {
++            sInstance = new TelephonyMetrics();
++        }
++        return sInstance;
++    }
++
 +    /**
-+     * Write Send SMS event (backwards-compatible method for R and earlier IMS implementations)
++     * Write Send SMS event (backwards-compatible stub for R and earlier IMS implementations)
++     *
++     * This method is called by MediaTek IMS packages. The actual implementation was moved
++     * to SmsStats in newer Android versions, but we keep this stub to prevent crashes
++     * in older IMS implementations that invoke this method via reflection.
 +     *
 +     * @param phoneId Phone id
 +     * @param rilSerial RIL request serial number
 +     * @param tech SMS RAT
-+     * @param format SMS format. Either {@link SmsMessage#FORMAT_3GPP} or
-+     *         {@link SmsMessage#FORMAT_3GPP2}.
++     * @param format SMS format. Either 3GPP or 3GPP2.
 +     */
 +    public void writeRilSendSms(int phoneId, int rilSerial, int tech, int format) {
-+        writeRilSendSms(phoneId, rilSerial, tech, format, 0);
++        // Stub - no-op for backwards compatibility
++        // The actual SMS metrics are now handled by SmsStats.onOutgoingSms()
 +    }
 +
-     /**
-      * Write Send SMS event using ImsService. Expecting response from
-      * {@link #writeOnSmsSolicitedResponse}.
--- 
++    /**
++     * Write Send SMS event
++     *
++     * @param phoneId Phone id
++     * @param rilSerial RIL request serial number
++     * @param tech SMS RAT
++     * @param format SMS format. Either 3GPP or 3GPP2.
++     * @param messageId Unique id for this message.
++     */
++    public void writeRilSendSms(int phoneId, int rilSerial, int tech, int format, long messageId) {
++        // Stub - no-op for backwards compatibility
++        // The actual SMS metrics are now handled by SmsStats.onOutgoingSms()
++    }
++}
+--
 2.43.0
-
